@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card shadow-sm">
+        <div class="card-header bg-warning text-dark text-center">
+          <h4>Email Verification</h4>
+        </div>
+        <div class="card-body">
+          <p class="text-center">We’ve sent a 6-digit OTP to your email: <b>{{ email }}</b></p>
+          <form method="POST">
+            {% csrf_token %}
+            <div class="mb-3">
+              <label for="otp" class="form-label">Enter OTP</label>
+              <input type="text" name="otp" id="otp" class="form-control" maxlength="6" required>
+            </div>
+            <button type="submit" class="btn btn-warning w-100 mt-2">Verify</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

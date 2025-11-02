@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+  <h4>Chat about {{ room.product.name }}</h4>
+  <div id="messages" style="height:300px; overflow:auto; border:1px solid #ddd; padding:10px;">
+    {% for m in messages %}
+      <p><strong>{{ m.sender.username }}:</strong> {{ m.text }}</p>
+    {% endfor %}
+  </div>
+  <input id="messageInput" type="text" class="form-control" placeholder="Type..." />
+  <button id="sendBtn" class="btn btn-primary mt-2">Send</button>
+</div>
+
+<script>
+  const roomId = "{{ room.id }}";
+  const userId = "{{ request.user.id }}";
+  const ws_scheme = window.location.protocol === "https:" ? "wss" : "ws";
+  const chatSocket = new WebSocket(ws_scheme + '://' + window.location.host + '/ws/chat/' + roomId + '/');
+
+  chatSocket.onmessage = function(e) {
+    const data = JSON.parse(e.data);
+    const html = `<p><strong>${data.sender_id == userId ? 'You' : 'User ' + data.sender_id}:</strong> ${data.message}</p>`;
+    document.getElementById('messages').innerHTML += html;
+  };
+
+  document.getElementById('sendBtn').onclick = function() {
+    const text = document.getElementById('messageInput').value;
+    if (!text) return;
+    chatSocket.send(JSON.stringify({'message': text, 'sender_id': userId}));
+    document.getElementById('messageInput').value = '';
+  };
+</script>
+{% endblock %}

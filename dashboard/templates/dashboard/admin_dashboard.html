@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-5">
+  <h2>Admin Dashboard</h2>
+  <hr>
+
+  <h4>Users</h4>
+  <ul>
+    {% for user in users %}
+      <li>{{ user.username }} - {{ user.email }}</li>
+    {% endfor %}
+  </ul>
+
+  <h4>Products</h4>
+  <ul>
+    {% for product in products %}
+      <li>{{ product.name }} - ₹{{ product.price }}</li>
+    {% endfor %}
+  </ul>
+
+  <h4>Cart Items</h4>
+  <ul>
+    {% for item in cart_items %}
+      <li>{{ item.product.name }} ({{ item.quantity }})</li>
+    {% empty %}
+      <li>No items in cart</li>
+    {% endfor %}
+  </ul>
+</div>
+{% endblock %}
