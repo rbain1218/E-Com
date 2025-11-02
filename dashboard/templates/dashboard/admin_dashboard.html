@@ -1,31 +1,67 @@
 {% extends 'base.html' %}
-
 {% block content %}
-<div class="container py-5">
-  <h2>Admin Dashboard</h2>
-  <hr>
+<div class="container mt-5">
+  <h2 class="text-center text-primary mb-4">🛠 Admin Dashboard</h2>
 
-  <h4>Users</h4>
-  <ul>
-    {% for user in users %}
-      <li>{{ user.username }} - {{ user.email }}</li>
-    {% endfor %}
-  </ul>
+  <div class="text-end mb-3">
+    <a href="{% url 'dashboard:add_product' %}" class="btn btn-success">+ Add New Product</a>
+  </div>
 
-  <h4>Products</h4>
-  <ul>
-    {% for product in products %}
-      <li>{{ product.name }} - ₹{{ product.price }}</li>
-    {% endfor %}
-  </ul>
+  <h4 class="text-secondary mt-4">📦 Products</h4>
+  <table class="table table-bordered table-hover">
+    <thead class="table-dark">
+      <tr>
+        <th>ID</th>
+        <th>Image</th>
+        <th>Name</th>
+        <th>Price</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for product in products %}
+      <tr>
+        <td>{{ product.id }}</td>
+        <td><img src="{{ product.image.url }}" alt="" width="60"></td>
+        <td>{{ product.name }}</td>
+        <td>₹{{ product.price }}</td>
+        <td>
+          <a href="{% url 'dashboard:edit_product' product.id %}" class="btn btn-warning btn-sm">Edit</a>
+          <a href="{% url 'dashboard:delete_product' product.id %}" class="btn btn-danger btn-sm">Delete</a>
+        </td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="5" class="text-center">No products found.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
 
-  <h4>Cart Items</h4>
-  <ul>
-    {% for item in cart_items %}
-      <li>{{ item.product.name }} ({{ item.quantity }})</li>
-    {% empty %}
-      <li>No items in cart</li>
-    {% endfor %}
-  </ul>
+  <h4 class="text-secondary mt-5">👥 Users</h4>
+  <table class="table table-striped">
+    <thead class="table-dark">
+      <tr>
+        <th>ID</th>
+        <th>Username</th>
+        <th>Email</th>
+        <th>Admin?</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for user in users %}
+      <tr>
+        <td>{{ user.id }}</td>
+        <td>{{ user.username }}</td>
+        <td>{{ user.email }}</td>
+        <td>{% if user.is_superuser %}✅{% else %}❌{% endif %}</td>
+        <td>
+          {% if not user.is_superuser %}
+          <a href="{% url 'dashboard:delete_user' user.id %}" class="btn btn-danger btn-sm">Delete</a>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 </div>
 {% endblock %}

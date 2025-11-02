@@ -1,18 +1,22 @@
 from django.db import models
-from django.conf import settings
-from products.models import Product
-from django.conf import settings
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 
-class ChatRoom(models.Model):
-    buyer = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='buyer_rooms', on_delete=models.CASCADE)
-    seller = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='seller_rooms', on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
+class Room(models.Model):
+    name = models.CharField(max_length=255, unique=True)
+    users = models.ManyToManyField(User, related_name='chat_rooms')
+
+    def __str__(self):
+        return self.name
+
 
 class Message(models.Model):
-    room = models.ForeignKey(ChatRoom, related_name='messages', on_delete=models.CASCADE)
-    sender = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    text = models.TextField()
+    room = models.ForeignKey(Room, on_delete=models.CASCADE, related_name='messages')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    content = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
-    read = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.user.username}: {self.content[:30]}"

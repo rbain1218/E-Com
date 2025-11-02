@@ -11,6 +11,7 @@ urlpatterns = [
     path('cart/', include(('cart.urls', 'cart'), namespace='cart')),
     path('chat/', include(('chat.urls', 'chat'), namespace='chat')),
     path('dashboard/', include(('dashboard.urls', 'dashboard'), namespace='dashboard')),
+
 ]
 
 if settings.DEBUG:
