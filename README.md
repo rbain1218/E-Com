@@ -130,7 +130,7 @@ HOW TO LOGIN AS ADMIN
 ------------------------------------
 CREDITS
 ------------------------------------
-Developer: Rahul Bain  
+Developer: Biswajit Bain  
 Language: Python Django  
 Email: rbain1218@gmail.com  
 GitHub: https://github.com/rbain1218
